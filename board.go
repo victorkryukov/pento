@@ -41,6 +41,21 @@ func (b *Board) Place(f Figure) bool {
 	return true
 }
 
+// PlaceAt is similar to Place, but places at point p as opposed to Point{0,0}.
+func (b *Board) PlaceAt(f Figure, p Point) bool {
+	return b.Place(f.Move(p))
+}
+
+// Unplace remove the figure that was last added from the board.
+func (b *Board) Unplace() {
+	if n := len(b.Figures); n > 0 {
+		for _, p := range b.Figures[n-1] {
+			b.Field[p.X][p.Y] = false
+		}
+		b.Figures = b.Figures[:n-1]
+	}
+}
+
 // String returns a board representation as a string. Empty cells
 // are represented with '.', and figures each with it's own letter a-zA-Z.
 func (b *Board) String() string {

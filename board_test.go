@@ -22,6 +22,8 @@ func TestBoard(t *testing.T) {
 	assert.Equal(b.String(), "..\nbb\naa\n")
 	assert.False(b.Place(Figure{Point{0, 2}, Point{1, 2}, Point{0, 3}}))
 	assert.Equal(b.String(), "..\nbb\naa\n")
+	assert.True(b.PlaceAt(f, Point{0, 2}))
+	assert.Equal(b.String(), "cc\nbb\naa\n")
 
 	b = NewBoard(53, 1)
 	for i := 0; i <= 51; i++ {
@@ -30,4 +32,8 @@ func TestBoard(t *testing.T) {
 	assert.Equal("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.\n", b.String())
 	assert.True(b.Place(Figure{Point{52, 0}}))
 	assert.Equal(b.String(), "too many figures on the board: 53")
+	b.Unplace()
+	b.Unplace()
+	b.Unplace()
+	assert.Equal("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX...\n", b.String())
 }
