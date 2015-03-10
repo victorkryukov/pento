@@ -50,6 +50,35 @@ func (f Figure) Move(p Point) Figure {
 	return newf
 }
 
+// String returns a figure representation as a string, as if it
+// was placed on a board starting in the bottom left corner.
+func (f Figure) String() string {
+	if len(f) == 0 {
+		return "empty figure"
+	}
+	minX := f[0].X
+	maxX := f[0].X
+	minY := f[0].Y
+	maxY := f[0].Y
+	for i := 1; i < len(f); i++ {
+		if minX > f[i].X {
+			minX = f[i].X
+		}
+		if maxX < f[i].X {
+			maxX = f[i].X
+		}
+		if minY > f[i].Y {
+			minY = f[i].Y
+		}
+		if maxY < f[i].Y {
+			maxY = f[i].Y
+		}
+	}
+	b := NewBoard(maxX-minX+1, maxY-minY+1)
+	b.PlaceAt(f, Point{-minX, -minY})
+	return b.String()
+}
+
 // Equal returns true if two figures contain the same set of points,
 // maybe in different order. It's very inefficient, but we only use it
 // in tests.
