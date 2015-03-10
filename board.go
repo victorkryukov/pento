@@ -69,7 +69,7 @@ func (b *Board) Full() bool {
 }
 
 // String returns a board representation as a string. Empty cells
-// are represented with '.', and figures each with it's own letter a-zA-Z.
+// are represented with '.', and each figure with its own letter a-zA-Z.
 func (b *Board) String() string {
 	if b == nil || b.SizeX == 0 || b.SizeY == 0 {
 		return "empty board"
@@ -99,11 +99,9 @@ func (b *Board) String() string {
 	return buf.String()
 }
 
-var fillIterations int // Cumulative number of Fill calls
-const printAfterNIterations = -1
-
 // Fill tries to place each figure on the board and on success calls it recursively.
-// When board is full, a handler is called.
+// When board is full, a handler is called. Note: all figures must be recentered,
+// otherwise this algorithm wouldn't work.
 func (b *Board) Fill(figures []Figure, handler func(*Board)) {
 	if b.Full() {
 		handler(b)
@@ -112,17 +110,10 @@ func (b *Board) Fill(figures []Figure, handler func(*Board)) {
 	for x := 0; x < b.SizeX; x++ {
 		for y := 0; y < b.SizeY; y++ {
 			if !b.Field[x][y] {
-				//fmt.Printf("Trying to place a figure at (%d,%d) in\n%s", x+1, y+1, b)
 				for _, f := range figures {
 					if b.PlaceAt(f, Point{x, y}) {
-						fillIterations++
-						if printAfterNIterations > 0 && fillIterations%printAfterNIterations == 0 {
-							fmt.Println(b)
-						}
 						b.Fill(figures, handler)
 						b.Unplace()
-					} else {
-						//		fmt.Printf("doesn't fit:\n%s\n", f)
 					}
 				}
 				return // Since we are trying to place pentos in the first available place
