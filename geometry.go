@@ -1,6 +1,6 @@
 package main
 
-// Point is a point on a (x,y) plane with integer coordinates.
+// Point is a point/vector on a (x,y) plane with integer coordinates.
 type Point struct {
 	X, Y int
 }
@@ -37,6 +37,15 @@ func (f Figure) Mirror() Figure {
 	newf := Figure{}
 	for _, p := range f {
 		newf = append(newf, p.Mirror())
+	}
+	return newf
+}
+
+// Move moves a figure by vector p
+func (f Figure) Move(p Point) Figure {
+	newf := Figure{}
+	for _, pp := range f {
+		newf = append(newf, Point{pp.X + p.X, pp.Y + p.Y})
 	}
 	return newf
 }

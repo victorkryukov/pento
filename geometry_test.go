@@ -26,9 +26,9 @@ func TestFigure(t *testing.T) {
 	assert.False(f.Equal(f1))
 	assert.False(f1.Mirror().Equal(f1))
 	assert.True(f1.Mirror().Mirror().Equal(f1))
-
 	assert.False(f.Rotate().Equal(f))
 	assert.False(f.Rotate().Rotate().Equal(f))
 	assert.False(f.Rotate().Rotate().Rotate().Equal(f))
 	assert.True(f.Rotate().Rotate().Rotate().Rotate().Equal(f))
+	assert.Equal(f1.Move(Point{-1, -1}), f1.Rotate())
 }
