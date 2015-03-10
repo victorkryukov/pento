@@ -50,6 +50,25 @@ func (f Figure) Move(p Point) Figure {
 	return newf
 }
 
+// Recenter moves the figure so that it's left-most and bottom-most (in that order)
+// point is (0,0).
+func (f Figure) Recenter() Figure {
+	if len(f) == 0 {
+		return f
+	}
+	minX := f[0].X
+	minY := f[0].Y
+	for i := 1; i < len(f); i++ {
+		if f[i].X < minX {
+			minX = f[i].X
+			minY = f[i].Y
+		} else if f[i].X == minX && f[i].Y < minY {
+			minY = f[i].Y
+		}
+	}
+	return f.Move(Point{-minX, -minY})
+}
+
 // String returns a figure representation as a string, as if it
 // was placed on a board starting in the bottom left corner.
 func (f Figure) String() string {

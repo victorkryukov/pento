@@ -40,3 +40,14 @@ func TestFigureString(t *testing.T) {
 	assert.Equal(Figure{Point{3, 2}, Point{2, 3}, Point{2, 2}}.String(), "a.\naa\n")
 	assert.Equal(Figure{}.String(), "empty figure")
 }
+
+func TestFigureRecenter(t *testing.T) {
+	assert := assert.New(t)
+	assert.Equal(Figure{}.Recenter(), Figure{})
+	f := Figure{Point{2, 3}, Point{1, 2}, Point{2, 2}}
+	f1 := Figure{Point{0, 0}, Point{1, 1}, Point{1, 0}}
+	assert.True(f.Recenter().Equal(f1), "\n%s\nrecenter should be equal to\n%s", f, f1)
+	f = Figure{Point{1, 1}, Point{2, 2}, Point{1, 0}}
+	f1 = Figure{Point{0, 0}, Point{0, 1}, Point{1, 2}}
+	assert.True(f.Recenter().Equal(f1), "\n%s\nrecenter should be equal to\n%s", f, f1)
+}
