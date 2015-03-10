@@ -99,9 +99,9 @@ func (b *Board) String() string {
 	return buf.String()
 }
 
-// Fill tries to place each figure on the board and on success calls it recursively.
+// Fill tries to place each figure on the board and on success calls itself recursively.
 // When board is full, a handler is called. Note: all figures must be recentered,
-// otherwise this algorithm wouldn't work.
+// otherwise the algorithm wouldn't work.
 func (b *Board) Fill(figures []Figure, handler func(*Board)) {
 	if b.Full() {
 		handler(b)
