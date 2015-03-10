@@ -10,6 +10,7 @@ type Board struct {
 	SizeX, SizeY int
 	Field        [][]bool // Tells whether (X,Y) coordinate is occupied
 	Figures      []Figure // Figures placed so far
+	empty        int      // number of empty places on the board
 }
 
 // NewBoard allocates memory for a new M x N board.
@@ -18,6 +19,7 @@ func NewBoard(m, n int) *Board {
 		return nil
 	}
 	b := &Board{SizeX: m, SizeY: n}
+	b.empty = m * n
 	b.Field = make([][]bool, m)
 	for i := 0; i < m; i++ {
 		b.Field[i] = make([]bool, n)
@@ -29,6 +31,9 @@ func NewBoard(m, n int) *Board {
 // the underlying board if placement was successful, otherwise it returns
 // false and DOES NOT modify the board.
 func (b *Board) Place(f Figure) bool {
+	if len(f) > b.empty {
+		return false
+	}
 	for _, p := range f {
 		if p.X < 0 || p.X >= b.SizeX || p.Y < 0 || p.Y >= b.SizeY || b.Field[p.X][p.Y] {
 			return false
@@ -37,6 +42,7 @@ func (b *Board) Place(f Figure) bool {
 	for _, p := range f {
 		b.Field[p.X][p.Y] = true
 	}
+	b.empty -= len(f)
 	b.Figures = append(b.Figures, f)
 	return true
 }
@@ -52,8 +58,14 @@ func (b *Board) Unplace() {
 		for _, p := range b.Figures[n-1] {
 			b.Field[p.X][p.Y] = false
 		}
+		b.empty += len(b.Figures[n-1])
 		b.Figures = b.Figures[:n-1]
 	}
+}
+
+// Full returns true if board is full
+func (b *Board) Full() bool {
+	return b.empty == 0
 }
 
 // String returns a board representation as a string. Empty cells
